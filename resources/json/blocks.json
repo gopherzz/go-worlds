@@ -1,0 +1,32 @@
+[{
+        "type": 2,
+        "id": 0,
+        "name": "Floor Dirt",
+        "strength": 2
+    },
+    {
+        "type": 1,
+        "id": 1,
+        "name": "Dirt",
+        "strength": 2
+    },
+    {
+        "type": 1,
+        "id": 2,
+        "name": "Deep Sand",
+        "strength": 3
+    },
+    {
+        "type": 1,
+        "id": 3,
+        "name": "Sand",
+        "strength": 2
+    },
+    {
+        "type": 1,
+        "id": 4,
+        "name": "Rock",
+        "strength": 4
+    }
+
+]
