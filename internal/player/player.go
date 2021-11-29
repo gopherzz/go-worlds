@@ -35,10 +35,13 @@ func NewPlayer(x, y float64, imagepath string, world *world.World, txt *text.Tex
 	sprite := pixel.NewSprite(pic, pic.Bounds())
 
 	inv := inventory.NewInventory()
+
 	for i := range block.BLOCKS {
 		inv.AddItemWithCount(i, 5)
+		fmt.Println(i)
 	}
-
+	fmt.Println(inv.Length())
+	fmt.Fprint(txt, inv.GetSlot(0).Block.Name)
 	return &Player{
 		screenPos: pixel.V(x, y),
 		worldPos:  pixel.V(float64(int(x)-(int(x)%constants.WORLD_WIDTH)), float64(int(y)-(int(y)%constants.WORLD_HEIGHT))),
@@ -88,21 +91,29 @@ func (p *Player) UseController(win *pixelgl.Window) {
 }
 
 func (p *Player) changeBlock() {
-	if p.selectedIndex+1 == p.inventory.Length() {
+	fmt.Println("Length: ", p.inventory.Length())
+	p.selected = p.inventory.Next()
+	if p.selected == nil {
 		p.selectedText.Clear()
-		p.selectedIndex = 0
-		fmt.Fprint(p.selectedText, p.inventory.GetSlot(p.selectedIndex).Block.Name)
-		p.selected = p.inventory.GetSlot(p.selectedIndex)
 		return
 	}
 	p.selectedText.Clear()
-	p.selectedIndex++
-	fmt.Fprint(p.selectedText, p.inventory.GetSlot(p.selectedIndex).Block.Name)
-	p.selected = p.inventory.GetSlot(p.selectedIndex)
+	fmt.Println("Selected: ", *p.selected)
+	fmt.Fprint(p.selectedText, p.selected.Block.Name)
 }
 
 func (p *Player) placeBlock(pos pixel.Vec) {
+	fmt.Println(p.selectedIndex)
+	if p.selected == nil {
+		return
+	}
 	if p.selected.Count <= 0 {
+		fmt.Println("ADSDASD")
+		p.inventory.ClearSlot(p.selected.Block.BlockId)
+		p.changeBlock()
+		return
+	}
+	if p.currentWorld.WorldMap[pos].Name != "" && p.currentWorld.WorldMap[pos].BlockType != blocktypes.BACKGROUND {
 		return
 	}
 	fmt.Println(p.selected)
